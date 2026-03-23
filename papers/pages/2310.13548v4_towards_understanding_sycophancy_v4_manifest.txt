@@ -1,0 +1,12 @@
+PDF: papers/2310.13548v4_towards_understanding_sycophancy_v4.pdf
+Total pages: 35
+Pages per chunk: 5
+
+Chunks:
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_001.pdf: pages 1-5
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_002.pdf: pages 6-10
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_003.pdf: pages 11-15
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_004.pdf: pages 16-20
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_005.pdf: pages 21-25
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_006.pdf: pages 26-30
+  2310.13548v4_towards_understanding_sycophancy_v4_chunk_007.pdf: pages 31-35

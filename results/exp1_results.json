@@ -1,0 +1,21 @@
+{
+  "kruskal_wallis_stat": 920.8061648017167,
+  "kruskal_wallis_p": 3.1708872000620665e-93,
+  "kruskal_wallis_n_groups": 200,
+  "n_users_analyzed": 1393,
+  "pct_prefer_longer": 84.06317300789664,
+  "pct_prefer_shorter": 15.936826992103374,
+  "mean_length_pref_ratio": 1.1887342299769983,
+  "std_length_pref_ratio": 0.21292829859854487,
+  "median_length_pref_ratio": 1.1926352310361141,
+  "mean_length_score_corr": 0.16897498259024882,
+  "std_length_score_corr": 0.22717274551214856,
+  "pct_positive_corr": 77.06685837526959,
+  "pct_sig_positive_corr": 32.13515456506111,
+  "aggregate_chosen_mean_length": 100.14560629806466,
+  "aggregate_rejected_mean_length": 83.73743098646602,
+  "aggregate_length_pref_ratio": 1.1959479186106223,
+  "aggregate_mannwhitney_u": 653649833.5,
+  "aggregate_mannwhitney_p": 3.1732396370798974e-290,
+  "aggregate_effect_size_r": -0.16400364977786897
+}

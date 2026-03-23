@@ -1,0 +1,13 @@
+Resource finding phase completed successfully.
+Timestamp: 2026-03-23T13:30:00+00:00
+Papers downloaded: 25 (29 files including version duplicates)
+Datasets downloaded: 5 (7 subdirectories, ~424MB)
+Repositories cloned: 2 (TRL, PAL)
+
+Key findings from literature review:
+- Verbosity/blandness in RLHF has multiple causes: RM length bias, preference aggregation, sycophancy incentives, and overoptimization
+- Length bias originates primarily in RM training, not pretraining/SFT (Shen et al. 2023)
+- Sycophancy is present before RL training, in pretraining+SFT (Sharma et al. 2024)
+- Personalized alignment survey treats verbosity as a preference dimension, not a failure mode
+- No prior work directly studies 1-person RLHF verbosity/blandness - this is a genuine research gap
+- PRISM dataset (1,396 real users with IDs) is ideal for single-annotator experiments

@@ -1,0 +1,6 @@
+{
+  "individual_gemma_2b": "results/models/individual_gemma_2b",
+  "individual_beaver_7b": "results/models/individual_beaver_7b",
+  "individual_oasst_deberta_v3": "results/models/individual_oasst_deberta_v3",
+  "aggregate": "results/models/aggregate"
+}

@@ -1,0 +1,16 @@
+# Exclude all dataset files (large binary Arrow/Parquet files)
+# These can be regenerated via the download scripts
+anthropic-hh-rlhf/
+openai-summarize-comparisons/
+personal-llm/
+prism-conversations/
+prism-survey/
+prism-utterances/
+prism-metadata/
+shp-sample-50k/
+
+# General patterns for dataset artifacts
+*.arrow
+*.parquet
+*.bin
+*.cache

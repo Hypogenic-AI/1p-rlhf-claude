@@ -1,0 +1,7 @@
+PDF: papers/2310.10076v1_verbosity_bias_preference_labeling.pdf
+Total pages: 10
+Pages per chunk: 5
+
+Chunks:
+  2310.10076v1_verbosity_bias_preference_labeling_chunk_001.pdf: pages 1-5
+  2310.10076v1_verbosity_bias_preference_labeling_chunk_002.pdf: pages 6-10

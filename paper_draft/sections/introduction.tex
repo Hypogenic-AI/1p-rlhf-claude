@@ -1,0 +1,19 @@
+\section{Introduction}
+\label{sec:intro}
+
+Language models trained with RLHF produce text that users describe as verbose, bland, and interchangeable across providers \citep{ouyang2022training, bai2022training}. This ``all AI sounds the same'' complaint has become a common criticism of modern assistants, yet its root cause remains poorly understood. The standard training pipeline has three stages---pretraining, supervised fine-tuning (SFT), and RLHF---and each could contribute differently to the problem. If verbosity and blandness originate in RLHF, personalizing the reward model to individual users may help. If they originate in pretraining or SFT, more fundamental interventions are needed.
+
+Standard RLHF aggregates preferences from many annotators into a single reward model. This aggregation provably discards minority preferences \citep{chakraborty2024maxmin} and amplifies majority tendencies. Since most humans prefer longer, more detailed responses \citep{shen2023loose, saito2023verbosity}, the resulting reward signal strongly favors verbosity. But is the problem aggregation, or is it something deeper?
+
+We isolate this question by training on a \emph{single person's} preferences---what we call \oneprlhf. If a model trained on one annotator who prefers concise responses still produces verbose, generic text, then RLHF itself (or the stages before it) is to blame. If the model instead mirrors that annotator's preferences, then aggregation is the culprit.
+
+Our experiments proceed in four stages. First, we analyze 1,393 real users in the \prism dataset \citep{kirk2024prism} and find that individual verbosity preferences vary significantly ($H{=}920.81$, $p{<}10^{-93}$), though 84.1\% still favor longer responses. Second, we train DPO models \citep{rafailov2023direct} on three individual simulated annotators from \personalllm \citep{personalllm2024} spanning the verbosity spectrum, plus an aggregate baseline. Third, we measure verbosity, lexical diversity, and inter-model similarity across all conditions. Fourth, we use \gptjudge as an LLM judge to evaluate helpfulness, verbosity, and distinctiveness.
+
+Our key finding is a decomposition: aggregate RLHF amplifies verbosity by 21\% over the SFT base model, and a brevity-preferring annotator can reduce output length by 30\% relative to aggregate ($p{=}0.042$). But \gptjudge rates distinctiveness at only 1.3--1.6 out of 5 for all conditions, including the base model with no RLHF at all. The generic AI tone is primarily a pretraining/SFT artifact that RLHF does not create and personalization cannot fix.
+
+We make the following contributions:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We conduct the first empirical study of single-annotator RLHF, showing that individual preferences \emph{do} transfer to model behavior---a brevity-preferring annotator produces significantly shorter outputs.
+    \item We provide a stage-wise decomposition of the verbosity and blandness problems: pretraining/SFT accounts for the base-level verbosity and nearly all of the blandness, while RLHF adds approximately 21\% additional verbosity through preference aggregation.
+    \item We analyze per-user length preferences in 1,393 real annotators, finding significant individual variation despite a majority preference for longer responses.
+\end{itemize}

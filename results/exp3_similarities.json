@@ -1,0 +1,12 @@
+{
+  "base_vs_individual_gemma_2b": 0.22631102663112945,
+  "base_vs_individual_beaver_7b": 0.23276595540553277,
+  "base_vs_individual_oasst_deberta_v3": 0.2745037007077903,
+  "base_vs_aggregate": 0.26350236044616787,
+  "individual_gemma_2b_vs_individual_beaver_7b": 0.23460540236742194,
+  "individual_gemma_2b_vs_individual_oasst_deberta_v3": 0.2684432341643973,
+  "individual_gemma_2b_vs_aggregate": 0.2665131876351155,
+  "individual_beaver_7b_vs_individual_oasst_deberta_v3": 0.2523743440773395,
+  "individual_beaver_7b_vs_aggregate": 0.23042253134711582,
+  "individual_oasst_deberta_v3_vs_aggregate": 0.27813483252573734
+}

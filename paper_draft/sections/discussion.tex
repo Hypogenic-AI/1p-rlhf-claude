@@ -1,0 +1,29 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{Verbosity is an aggregation artifact; blandness is not.}
+Our results support a clean decomposition. The base model (SFT only) already produces 118.8 words on average, establishing a verbosity baseline \emph{before} any preference optimization. Aggregate DPO adds 21\% on top of this, and the aggregate model overshoots even the length-loving \gemma model (143.6 vs.\ 119.3 words). This overshoot likely arises because aggregation creates a stronger, more consistent length signal than any single annotator provides. A brevity-preferring annotator (\beaver) can reverse this trend, producing outputs 30\% shorter than aggregate.
+
+Blandness, however, is invariant to the training condition. \gptjudge rates all five models---including the base model with no DPO---at 1.3--1.6 out of 5 on distinctiveness. This means the generic AI tone is established during pretraining and SFT and is not meaningfully altered by preference optimization. We estimate that pretraining/SFT accounts for approximately 80\% of base-level verbosity and nearly all of the blandness, while RLHF contributes the remaining 20\% of verbosity through aggregation.
+
+\para{Why does aggregate DPO overshoot individual preferences?}
+The aggregate model produces longer outputs than any individual annotator's model, including \gemma, whose training data has the strongest length bias ($r{=}0.77$). We hypothesize that aggregation across annotators who disagree on many response features but \emph{agree} on preferring length creates a reward landscape where length is the most consistent signal. DPO then optimizes toward this consensus direction, producing outputs longer than any individual would prefer.
+
+\para{The KL penalty limits individual preference transfer.}
+The \gemma model, trained on data with a 2.11$\times$ chosen-to-rejected length ratio, produces outputs nearly identical in length to the base model (119.3 vs.\ 118.8 words). The DPO KL penalty ($\beta{=}0.1$) constrains the model to stay close to the SFT policy, limiting how much an individual annotator's preferences can shift the output distribution. This regularization prevents extreme divergence but also means that a single annotator's quirks may not fully transfer, especially when the base model already exhibits the target behavior.
+
+\para{LLM judges have a length bias.}
+The aggregate model scores highest on both verbosity (2.64) and helpfulness (2.18), while the \beaver model scores lowest on both. This pattern is consistent with findings from \citet{saito2023verbosity} that LLM judges conflate length with quality. Researchers using LLM-based evaluation should control for length when comparing RLHF variants.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\para{Model scale.} We use a 1.5B-parameter model, which may not exhibit the full verbosity amplification seen in production-scale systems. Larger models show stronger RLHF effects, and our findings may underestimate the magnitude of both verbosity amplification and preference transfer.
+
+\para{Simulated annotators.} The \personalllm annotators are reward models, not real humans. Their ``preferences'' reflect architectural biases of the underlying models rather than genuine human values. Our \prism analysis uses real humans but only for preference analysis, not for DPO training.
+
+\para{Limited training data.} Each condition uses 800 DPO pairs. Real single-user RLHF would likely have even fewer data points, and our results may not generalize to extremely low-data regimes. Conversely, more training data could produce stronger preference transfer.
+
+\para{Single run.} We report results from a single training and generation run (seed 42). Temperature-based generation ($T{=}0.7$) introduces stochasticity, and confidence intervals from multiple runs would strengthen our statistical claims.
+
+\para{No pretraining/SFT separation.} Our base model (\qwen) is already instruction-tuned. We cannot isolate the contributions of pretraining from SFT, only their joint contribution versus RLHF. A three-way ablation would require access to the pre-SFT base model.

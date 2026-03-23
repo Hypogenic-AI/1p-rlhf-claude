@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/1p-rlhf-claude/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/1p-rlhf-claude/literature_review.md",
+        "resources_catalog": "/workspaces/1p-rlhf-claude/resources.md",
+        "papers_dir": "/workspaces/1p-rlhf-claude/papers",
+        "datasets_dir": "/workspaces/1p-rlhf-claude/datasets",
+        "code_dir": "/workspaces/1p-rlhf-claude/code"
+      },
+      "log_file": "/workspaces/1p-rlhf-claude/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/1p-rlhf-claude/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 1436.914366722107
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 6505.760123252869,
+      "log_file": "/workspaces/1p-rlhf-claude/logs/execution_claude.log",
+      "transcript_file": "/workspaces/1p-rlhf-claude/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/1p-rlhf-claude"
+}

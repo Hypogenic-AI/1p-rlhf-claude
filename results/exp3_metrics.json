@@ -1,0 +1,72 @@
+[
+  {
+    "model": "base",
+    "n_responses": 100,
+    "mean_length_words": 118.8,
+    "std_length_words": 133.59251476037122,
+    "median_length_words": 35.0,
+    "mean_length_chars": 751.1,
+    "distinct_1": 0.35833333333333334,
+    "distinct_2": 0.8393887945670628,
+    "distinct_3": 0.9639554794520548,
+    "self_bleu": 0.0026223272800744587,
+    "vocab_size": 4257,
+    "type_token_ratio": 0.35833333333333334
+  },
+  {
+    "model": "individual_gemma_2b",
+    "n_responses": 100,
+    "mean_length_words": 119.28,
+    "std_length_words": 134.76424451611783,
+    "median_length_words": 27.0,
+    "mean_length_chars": 751.24,
+    "distinct_1": 0.3562206572769953,
+    "distinct_2": 0.8314169766655394,
+    "distinct_3": 0.9592428376534788,
+    "self_bleu": 0.0014337563472052724,
+    "vocab_size": 4249,
+    "type_token_ratio": 0.3562206572769953
+  },
+  {
+    "model": "individual_beaver_7b",
+    "n_responses": 100,
+    "mean_length_words": 100.81,
+    "std_length_words": 123.41755912348938,
+    "median_length_words": 19.0,
+    "mean_length_chars": 635.9,
+    "distinct_1": 0.38240253943061203,
+    "distinct_2": 0.8454062719166416,
+    "distinct_3": 0.9592146543872078,
+    "self_bleu": 0.001801956272913104,
+    "vocab_size": 3855,
+    "type_token_ratio": 0.38240253943061203
+  },
+  {
+    "model": "individual_oasst_deberta_v3",
+    "n_responses": 100,
+    "mean_length_words": 119.56,
+    "std_length_words": 128.2195242543038,
+    "median_length_words": 43.5,
+    "mean_length_chars": 748.07,
+    "distinct_1": 0.34585145533623285,
+    "distinct_2": 0.8301282051282052,
+    "distinct_3": 0.9611262334127254,
+    "self_bleu": 0.0011215682042782168,
+    "vocab_size": 4135,
+    "type_token_ratio": 0.34585145533623285
+  },
+  {
+    "model": "aggregate",
+    "n_responses": 100,
+    "mean_length_words": 143.61,
+    "std_length_words": 142.37709752625244,
+    "median_length_words": 58.0,
+    "mean_length_chars": 925.58,
+    "distinct_1": 0.3467725088782118,
+    "distinct_2": 0.8363368627725966,
+    "distinct_3": 0.9637031283101476,
+    "self_bleu": 0.00022793636104186316,
+    "vocab_size": 4980,
+    "type_token_ratio": 0.3467725088782118
+  }
+]

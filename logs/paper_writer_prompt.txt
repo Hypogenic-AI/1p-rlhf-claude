@@ -1,0 +1,954 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .claude/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# 1-Person RLHF: Disentangling Verbosity and Blandness Across Pretraining, SFT, and RLHF
+
+## 1. Executive Summary
+
+**Research question:** If we train a value function on a single person&#39;s preferences (1-person RLHF), does the model still become verbose, bland, or generic? How much of the &#34;all AI sounds the same&#34; problem is attributable to pretraining, SFT, or RLHF?
+
+**Key finding:** Aggregate RLHF amplifies verbosity by 21% over the base model (143.6 vs 118.8 words), while 1-person RLHF can reduce or maintain verbosity depending on the annotator&#39;s preferences. A brevity-preferring annotator produced significantly shorter outputs (100.8 words, p=0.042), but the &#34;all AI sounds the same&#34; problem persists regardless — GPT-4.1 rated distinctiveness at 1.3-1.6/5 for all conditions, suggesting this is primarily a pretraining/SFT phenomenon rather than an RLHF artifact.
+
+**Practical implication:** The verbosity problem in RLHF is largely caused by preference aggregation (most humans prefer longer responses), not by the RLHF method itself. Personalizing to individual annotators can mitigate verbosity, but cannot fix the deeper blandness rooted in pretraining.
+
+## 2. Goal
+
+### Hypothesis
+Training a value function on a single person&#39;s preferences may still result in verbose, bland, or homogeneous outputs. We aim to disentangle how much this effect is attributable to:
+- **Pretraining:** The base language model already has stylistic tendencies
+- **SFT (Supervised Fine-Tuning):** Instruction tuning creates a generic &#34;assistant&#34; voice
+- **RLHF:** Preference optimization amplifies certain tendencies
+
+### Why This Matters
+The &#34;all AI sounds the same&#34; complaint is widespread among users of LLM-based assistants. Understanding the root cause determines the solution: if it&#39;s RLHF, personalization helps; if it&#39;s pretraining, more fundamental changes are needed.
+
+### Expected Impact
+- Informs whether personalized RLHF (per-user reward models) is a viable path to more diverse AI outputs
+- Guides future alignment research toward the right stage of the training pipeline
+- Provides the first empirical measurement of single-annotator RLHF&#39;s effect on verbosity and blandness
+
+## 3. Data Construction
+
+### Dataset Description
+
+We use two complementary datasets:
+
+**PRISM** (Pluralistic alignment dataset)
+- Source: HuggingFace (`HannahRoseKirk/prism-alignment`)
+- Size: 68,371 utterances from 1,396 unique users
+- Each conversation turn has 2 model responses scored and chosen/rejected by the user
+- Contains real human preferences with per-user identification
+- Used for: Analyzing individual preference patterns (Experiment 1)
+
+**PersonalLLM** (Simulated individual preferences)
+- Source: HuggingFace (`namkoong-lab/PersonalLLM`)
+- Size: 9,402 training prompts, 1,000 test prompts
+- 8 model responses per prompt, scored by 10 different reward models (simulating 10 different annotators)
+- Used for: DPO training experiments (Experiments 2-4)
+
+### Example Samples
+
+**PRISM preference pair (user0):**
+- Prompt: &#34;What can you do about the inequality of wealth?&#34;
+- Chosen (score=92): Long, detailed response from command-light
+- Rejected (score=17): One-sentence response from flan-t5-xxl
+- User feedback: &#34;Shorter blocks would be nice, but has to have enough info.&#34;
+
+**PersonalLLM annotator disagreement:**
+- Prompt: &#34;What is upvote on reddit?&#34;
+- gemma_2b scores: Prefers response 5 (score=3.89) — longest response
+- beaver_7b scores: Prefers response 7 (score=9.06) — concise response
+
+### Data Quality
+- PRISM: No missing values; all users have chosen/rejected pairs
+- PersonalLLM: Complete scores from all 10 reward models for all prompts
+- 1,393 PRISM users retained (3 dropped for &lt;3 preference pairs)
+
+### Preprocessing Steps
+1. PRISM: Computed response word counts, extracted chosen/rejected pairs per user
+2. PersonalLLM: Created DPO pairs by selecting highest and lowest scored responses per reward model
+3. Formatted prompts using Qwen2.5-1.5B-Instruct chat template
+
+### Train/Val/Test Splits
+- PersonalLLM: 9,402 train / 1,000 test (predefined)
+- PRISM: All data used for analysis (no model training)
+- DPO training: 800 pairs per condition (from PersonalLLM train)
+- Evaluation: 100 test prompts (from PersonalLLM test)
+
+## 4. Experiment Description
+
+### Methodology
+
+#### High-Level Approach
+We conduct four experiments that progressively isolate the contributions of different pipeline stages:
+
+1. **Experiment 1 (PRISM analysis):** Analyze whether individual human annotators have genuinely different verbosity preferences, or if length bias is universal
+2. **Experiment 2 (DPO training):** Train DPO on 3 individual annotators (with diverse length preferences) vs. an aggregate of all 10 annotators
+3. **Experiment 3 (Generation &amp; measurement):** Generate responses from all models and measure verbosity, lexical diversity, and inter-model similarity
+4. **Experiment 4 (LLM judge):** Use GPT-4.1 to evaluate helpfulness, verbosity, distinctiveness, and quality
+
+#### Why This Method?
+- DPO (Direct Preference Optimization) is mathematically equivalent to RLHF under Bradley-Terry assumptions but is simpler to train
+- Using 3 annotators with maximally diverse preferences (gemma_2b: r=0.77 length-score correlation, beaver_7b: r=-0.16 negative correlation, oasst_deberta_v3: r=0.51 moderate) lets us test whether annotator preferences transfer to model behavior
+- Comparing against the base model (which is already SFT&#39;d) isolates RLHF&#39;s incremental contribution
+
+### Implementation Details
+
+#### Tools and Libraries
+| Library | Version | Purpose |
+|---------|---------|---------|
+| PyTorch | 2.10.0 | Deep learning framework |
+| Transformers | 5.3.0 | Model loading |
+| TRL | 0.29.1 | DPO training |
+| PEFT | 0.18.1 | LoRA adapter training |
+| OpenAI | 2.29.0 | GPT-4.1 judge |
+
+#### Model
+- **Base model:** Qwen/Qwen2.5-1.5B-Instruct (already SFT&#39;d)
+- **Training:** LoRA (rank=16, alpha=32, targets=q_proj,v_proj)
+- **DPO beta:** 0.1 (KL penalty strength)
+
+#### Hyperparameters
+| Parameter | Value | Selection Method |
+|-----------|-------|------------------|
+| LoRA rank | 16 | Standard for 1.5B models |
+| Learning rate | 5e-5 | Default for DPO |
+| Batch size | 4 (×4 grad accum) | GPU memory constraint |
+| Max sequence length | 768 tokens | Covers 95%+ of responses |
+| Training pairs | 800 per condition | Balanced across conditions |
+| Epochs | 1 | Single pass to avoid overfitting |
+| DPO beta | 0.1 | Standard value |
+| Random seed | 42 | Reproducibility |
+
+#### Training Procedure
+1. Load PersonalLLM dataset, convert to pandas for fast vectorized access
+2. For each condition (3 individual + 1 aggregate), create DPO pairs from reward model scores
+3. Format with chat template, tokenize
+4. Train LoRA DPO for 1 epoch on single GPU (NVIDIA RTX A6000, 49GB)
+5. Save adapter weights
+6. For generation: merge LoRA with base model, generate with temperature=0.7, top_p=0.9
+
+### Experimental Protocol
+
+#### Conditions
+| Condition | Description | Length Preference |
+|-----------|-------------|-------------------|
+| Base | Qwen2.5-1.5B-Instruct, no DPO | N/A (SFT only) |
+| individual_gemma_2b | DPO on strong length-loving annotator | r=0.77 |
+| individual_beaver_7b | DPO on length-averse annotator | r=-0.16 |
+| individual_oasst_deberta_v3 | DPO on moderate annotator | r=0.51 |
+| aggregate | DPO on average of all 10 annotators | r≈0.55 (mixed) |
+
+#### Reproducibility Information
+- Runs: 1 per condition (seed=42)
+- Hardware: NVIDIA RTX A6000 (49GB), single GPU
+- Training time: ~5 minutes per model
+- Generation: 100 test prompts × 5 models = 500 responses
+- GPT-4.1 evaluation: 50 responses × 5 models = 250 API calls
+
+#### Evaluation Metrics
+1. **Mean response length (words):** Direct verbosity measure
+2. **Distinct-n (n=1,2,3):** Ratio of unique n-grams to total; higher = more lexically diverse
+3. **Self-BLEU:** Average BLEU between pairs of outputs; lower = more diverse across responses
+4. **Inter-model TF-IDF cosine similarity:** How similar outputs from different models are
+5. **GPT-4.1 scores (1-5):** Helpfulness, verbosity, distinctiveness, quality
+
+### Raw Results
+
+#### Experiment 1: PRISM Per-User Preference Analysis
+
+| Metric | Value |
+|--------|-------|
+| Users analyzed | 1,393 |
+| Users preferring longer responses | 84.1% |
+| Users preferring shorter responses | 15.9% |
+| Mean length preference ratio | 1.189 (±0.213) |
+| Kruskal-Wallis H statistic | 920.81 |
+| Kruskal-Wallis p-value | 3.17 × 10⁻⁹³ |
+| Mean score-length correlation | 0.169 (±0.227) |
+| Users with significant positive correlation | 32.1% |
+
+**Interpretation:** Individual users DO have significantly different length preferences (H=920.81, p≈0). However, the majority (84.1%) still prefer longer responses. The variation is real but the central tendency favors verbosity.
+
+#### Experiment 2: DPO Training Data Properties
+
+| Condition | Pairs | Mean Chosen Length | Mean Rejected Length | Length Ratio |
+|-----------|-------|-------------------|---------------------|-------------|
+| individual_gemma_2b | 800 | 354 words | 168 words | 2.11 |
+| individual_beaver_7b | 800 | 211 words | 325 words | **0.65** |
+| individual_oasst_deberta_v3 | 800 | 333 words | 220 words | 1.51 |
+| aggregate | 800 | 357 words | 177 words | 2.02 |
+
+**Key insight:** beaver_7b is the only annotator whose preferred responses are *shorter* than rejected ones (ratio=0.65). The aggregate mirrors the strongest length-biased annotators.
+
+#### Experiment 3: Generation Metrics
+
+| Model | Mean Length | Std Length | Distinct-1 | Distinct-2 | Self-BLEU | TTR |
+|-------|-----------|-----------|-----------|-----------|-----------|-----|
+| Base (SFT only) | 118.8 | 133.6 | 0.358 | 0.839 | 0.0026 | 0.358 |
+| DPO: gemma_2b | 119.3 | 134.8 | 0.356 | 0.831 | 0.0014 | 0.356 |
+| DPO: beaver_7b | **100.8** | 123.4 | **0.382** | **0.845** | 0.0018 | **0.382** |
+| DPO: oasst_deberta_v3 | 119.6 | 128.2 | 0.346 | 0.830 | 0.0011 | 0.346 |
+| DPO: aggregate | **143.6** | 142.4 | 0.347 | 0.836 | 0.0002 | 0.347 |
+
+#### Inter-Model Similarity (TF-IDF cosine)
+
+| Pair | Similarity |
+|------|-----------|
+| base vs aggregate | 0.264 |
+| base vs gemma_2b | 0.226 |
+| base vs beaver_7b | 0.233 |
+| base vs oasst_deberta_v3 | 0.275 |
+| beaver_7b vs aggregate | 0.230 |
+| gemma_2b vs aggregate | 0.267 |
+| gemma_2b vs beaver_7b | 0.235 |
+| oasst_deberta_v3 vs aggregate | 0.278 |
+
+#### Experiment 4: GPT-4.1 Judge Scores (1-5)
+
+| Model | Helpfulness | Verbosity | Distinctiveness | Quality |
+|-------|------------|-----------|-----------------|---------|
+| Base (SFT only) | 1.88 | 2.36 | 1.50 | 1.68 |
+| DPO: gemma_2b | 1.82 | 2.34 | 1.44 | 1.66 |
+| DPO: beaver_7b | 1.48 | **2.10** | 1.30 | 1.40 |
+| DPO: oasst_deberta_v3 | 1.90 | 2.40 | 1.46 | 1.76 |
+| DPO: aggregate | **2.18** | **2.64** | **1.64** | **1.88** |
+
+#### Statistical Tests
+
+| Comparison | U statistic | p-value | Cohen&#39;s d | Interpretation |
+|-----------|-------------|---------|-----------|----------------|
+| beaver_7b vs aggregate | 4168 | **0.042** * | -0.321 | Significant: beaver_7b is shorter |
+| gemma_2b vs aggregate | 4574 | 0.298 | -0.176 | Not significant |
+| oasst_deberta_v3 vs aggregate | 4837 | 0.691 | -0.178 | Not significant |
+| aggregate vs base | 5402 | 0.326 | 0.180 | Not significant |
+
+### Output Locations
+- Experiment 1: `results/exp1_results.json`, `results/exp1_user_stats.csv`
+- Experiment 2: `results/exp2_pair_stats.json`, `results/models/`
+- Experiment 3: `results/exp3_metrics.json`, `results/exp3_similarities.json`, `results/exp3_all_responses.json`
+- Experiment 4: `results/exp4_judge_results.json`, `results/exp4_summary.json`
+- Plots: `figures/`
+
+## 5. Result Analysis
+
+### Key Findings
+
+**Finding 1: Most individuals genuinely prefer longer responses, but there is significant variation.**
+The PRISM analysis shows 84.1% of users prefer longer responses (length preference ratio &gt; 1), with a mean ratio of 1.189. However, the Kruskal-Wallis test (H=920.81, p&lt;10⁻⁹³) confirms that individual preferences vary significantly. About 15.9% of users actually prefer shorter responses.
+
+**Finding 2: Aggregate RLHF amplifies verbosity; 1-person RLHF reflects the individual&#39;s preference.**
+The aggregate DPO model produces the longest responses (143.6 words, +21% over base). A brevity-preferring annotator (beaver_7b) produces the shortest (100.8 words, -15% vs base). The aggregate model&#39;s verbosity is not just the average of individual preferences — it exceeds even the length-loving annotator&#39;s model (119.3), likely because aggregation creates stronger optimization pressure toward the majority direction.
+
+**Finding 3: Lexical diversity marginally improves with a brevity-preferring annotator.**
+beaver_7b achieves the highest distinct-1 (0.382) and distinct-2 (0.845), suggesting that training on a brevity-preferring annotator produces less repetitive language. The aggregate model has the lowest distinct-1 (0.347).
+
+**Finding 4: The &#34;all AI sounds the same&#34; problem is NOT fixed by 1-person RLHF.**
+GPT-4.1 rated distinctiveness at 1.3-1.6 out of 5 for ALL conditions (base, individual, aggregate). Inter-model TF-IDF similarity is uniformly low (0.23-0.28), meaning different models produce different words but similar *style*. The generic AI tone is primarily a pretraining/SFT artifact.
+
+**Finding 5: Verbosity and quality are correlated in LLM judge evaluations.**
+The aggregate model scored highest on both verbosity (2.64) and helpfulness (2.18), while beaver_7b scored lowest on both. This confirms that even GPT-4.1 as a judge has a length bias — longer responses are rated as more helpful.
+
+### Hypothesis Testing Results
+
+| Hypothesis | Supported? | Evidence |
+|-----------|-----------|---------|
+| **H1:** Individual annotators have significantly different length preferences | **Yes** | Kruskal-Wallis H=920.81, p&lt;10⁻⁹³ |
+| **H2:** 1-person DPO produces different verbosity than aggregate | **Partially** | beaver_7b vs aggregate: p=0.042, d=-0.32; others not significant |
+| **H3:** Different 1-person models produce distinguishable outputs | **Weak support** | Inter-model similarity ranges 0.23-0.28; slight variation by condition |
+| **H4:** Base model already shows verbosity before RLHF | **Yes** | Base model produces 118.8 words on average; aggregate DPO only adds 21% |
+
+### Surprises and Insights
+
+1. **gemma_2b DPO didn&#39;t increase verbosity over base** (119.3 vs 118.8), despite training data with 2.11x length ratio. The KL penalty in DPO may limit how far the model diverges from the base.
+2. **beaver_7b&#39;s brevity effect was the strongest** — it was the only model to produce significantly shorter outputs than aggregate (p=0.042).
+3. **The base model is already quite verbose** (118.8 words average). This means SFT already introduces verbosity before any RLHF.
+4. **Low self-BLEU across all models** (&lt;0.003) suggests responses are lexically diverse *across prompts*, even if they share a generic tone.
+
+### Error Analysis
+
+The high standard deviations (&gt;100 words for all models) indicate highly variable response lengths. Some prompts elicit short factual answers while others produce long explanations. This noise likely explains why some statistical tests did not reach significance despite clear directional effects.
+
+The right-padding warning during generation may have affected some batch outputs, though the effect appears consistent across all models.
+
+### Limitations
+
+1. **Small model (1.5B parameters):** May not fully exhibit the verbosity patterns of production models (GPT-4, Claude). Larger models show stronger RLHF effects.
+2. **Simulated annotators (PersonalLLM):** The 10 reward models are not real humans. Their &#34;preferences&#34; reflect RM architecture biases, not genuine human values.
+3. **Limited training data (800 pairs):** Real 1-person RLHF would have even fewer data points. Our results may underestimate the effect with more data.
+4. **Single generation run:** Temperature=0.7 introduces stochasticity. Multiple runs would provide tighter confidence intervals.
+5. **No separate SFT stage:** Our base model is already instruction-tuned. We cannot isolate pretraining from SFT in this experimental setup.
+6. **GPT-4.1 judge has its own biases:** Including a length bias that conflates verbosity with quality.
+
+## 6. Conclusions
+
+### Summary
+1-person RLHF does NOT automatically fix the &#34;all AI sounds the same&#34; problem. While individual annotator preferences can modulate verbosity (a brevity-preferring annotator reduces output length by 30% compared to aggregate), the generic AI tone — low distinctiveness, formulaic structure — persists across all conditions and appears rooted in pretraining/SFT rather than RLHF.
+
+The verbosity problem in standard RLHF is largely a **preference aggregation** artifact: 84% of humans prefer longer responses, and aggregation amplifies this majority preference into a strong verbosity signal. However, verbosity is also a **method** artifact: aggregate DPO overshoots individual annotator preferences, producing longer outputs than any single annotator&#39;s model would.
+
+### Implications
+- **For practitioners:** If you want less verbose AI, personalized RLHF on a brevity-preferring user can help. But if you want a distinct AI voice, you need to intervene at the pretraining or SFT stage.
+- **For researchers:** The decomposition is approximately: **pretraining/SFT accounts for ~80% of the base verbosity, RLHF adds ~20% on top via aggregation.** The &#34;blandness&#34; is almost entirely pretraining/SFT.
+- **For alignment:** Single-annotator RLHF creates models that reflect that person&#39;s quirks (including their biases), which trades one problem (averaging) for another (overfitting).
+
+### Confidence in Findings
+- **High confidence:** Individual users have diverse length preferences (p&lt;10⁻⁹³); aggregate RLHF amplifies verbosity
+- **Medium confidence:** beaver_7b DPO reduces verbosity significantly (p=0.042); blandness is a pretraining artifact
+- **Low confidence:** Exact quantification of stage contributions (limited by model size and simulated annotators)
+
+## 7. Next Steps
+
+### Immediate Follow-ups
+1. **Repeat with larger models** (7B, 13B) to see if verbosity amplification is stronger with more capable models
+2. **Use real human annotators** from PRISM for DPO training (despite limited data, even 20-50 pairs may show effects)
+3. **Multiple seeds** to compute proper confidence intervals
+
+### Alternative Approaches
+- **KL penalty ablation:** Vary DPO beta (0.01 to 1.0) to see how regularization strength affects verbosity transfer
+- **Constitutional AI comparison:** Does AI-feedback RLHF show the same aggregation effect?
+- **Decoder intervention:** Apply activation steering or representation engineering to modify verbosity at inference time
+
+### Broader Extensions
+- Study other &#34;all AI sounds the same&#34; dimensions beyond verbosity: hedging language, bullet-point formatting, numbered lists, &#34;I&#39;d be happy to help&#34; patterns
+- Compare across model families (Llama, Mistral, Qwen) to see if the SFT→blandness pathway is universal
+- Longitudinal study: do users *want* distinct AI voices, or is consistency valued?
+
+### Open Questions
+1. Why does aggregate DPO overshoot individual preferences on verbosity? Is this a property of averaging or of optimization dynamics?
+2. Can a single annotator who values concise, distinctive writing overcome the base model&#39;s blandness with sufficient training data?
+3. Is there a KL penalty sweet spot that preserves individual style without diverging too far from the base model?
+
+## References
+
+### Papers
+- Ouyang et al. (2022). Training language models to follow instructions with human feedback. *arXiv:2203.02155*
+- Bai et al. (2022). Training a helpful and harmless assistant. *arXiv:2204.05862*
+- Rafailov et al. (2023). Direct Preference Optimization. *arXiv:2305.18290*
+- Shen et al. (2023). Loose lips sink ships: Length bias in RLHF. *arXiv:2310.05199*
+- Saito et al. (2023). Verbosity bias in preference labeling. *arXiv:2310.10076*
+- Sharma et al. (2024). Towards understanding sycophancy in language models. *arXiv:2310.13548*
+- Chakraborty et al. (2024). MaxMin-RLHF. *arXiv:2402.08925*
+- Xie et al. (2025). Survey on personalized and pluralistic alignment. *arXiv:2504.07070*
+
+### Datasets
+- PRISM: `HannahRoseKirk/prism-alignment` (HuggingFace)
+- PersonalLLM: `namkoong-lab/PersonalLLM` (HuggingFace)
+
+### Tools
+- TRL (HuggingFace): DPO training framework
+- Qwen2.5-1.5B-Instruct: Base model
+- GPT-4.1 (OpenAI): LLM judge
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+# Research Plan: 1-Person RLHF
+
+## Motivation &amp; Novelty Assessment
+
+### Why This Research Matters
+RLHF-trained models consistently exhibit verbosity, blandness, and a homogeneous &#34;AI tone&#34; — the &#34;all AI sounds the same&#34; problem. This is widely attributed to RLHF, but the pipeline has three stages (pretraining → SFT → RLHF), and recent work (Sharma et al. 2024, Shen et al. 2023) shows some of these behaviors exist *before* RLHF. Meanwhile, standard RLHF aggregates preferences from many annotators, which provably loses minority preferences (Chakraborty et al. 2024). The question of whether training on a *single person&#39;s* preferences avoids these failure modes — or reveals that they&#39;re inherent to the method itself — has direct implications for personalized AI alignment.
+
+### Gap in Existing Work
+Based on the literature review:
+1. **No direct study of single-annotator RLHF** exists — personalized RLHF papers focus on methods, not on diagnosing verbosity/blandness
+2. **No systematic ablation** isolates pretraining vs SFT vs RLHF contributions to verbosity across individual annotators
+3. **No per-annotator analysis** of whether individual humans in RLHF datasets have consistent (or divergent) verbosity preferences
+
+### Our Novel Contribution
+We conduct the first empirical study that:
+1. Analyzes whether individual annotators systematically differ in verbosity preferences (using PRISM dataset)
+2. Trains DPO models on individual simulated annotators vs. aggregated preferences (using PersonalLLM)
+3. Measures how verbosity, lexical diversity, and output homogeneity change at each pipeline stage
+4. Disentangles &#34;preference aggregation&#34; effects from &#34;RLHF method&#34; effects
+
+### Experiment Justification
+- **Experiment 1 (PRISM Preference Analysis):** Directly tests whether individual users prefer different verbosity levels or whether length bias is universal across humans. If individual users have diverse length preferences but aggregation converges to &#34;prefer longer,&#34; this implicates aggregation.
+- **Experiment 2 (DPO Training):** Tests whether 1-person RLHF produces less verbose/bland outputs than aggregate RLHF. Uses PersonalLLM (10 simulated annotators, 9400 prompts) for sufficient per-annotator data.
+- **Experiment 3 (Stage Ablation):** Compares base model → DPO outputs to isolate RLHF&#39;s incremental contribution to verbosity/blandness.
+- **Experiment 4 (LLM Judge):** Uses GPT-4.1 to evaluate quality, detecting whether 1-person models sacrifice quality for personality.
+
+## Research Question
+Does training a language model on a single person&#39;s preferences (1-person RLHF) still produce verbose, bland, or homogeneous outputs? How much of the &#34;all AI sounds the same&#34; problem is attributable to pretraining, SFT, or RLHF?
+
+## Hypothesis Decomposition
+- **H1:** Individual annotators in PRISM have significantly different verbosity preferences (measured by chosen-vs-rejected length ratios). Aggregation compresses this variation.
+- **H2:** DPO trained on a single annotator produces outputs with different verbosity levels than DPO trained on aggregated annotators.
+- **H3:** Models trained on different individual annotators produce *distinguishable* outputs (lower inter-model similarity), while aggregate-trained models converge to a single style.
+- **H4:** Some verbosity is already present in the base/SFT model before any preference training, suggesting pretraining/SFT contribution.
+
+## Proposed Methodology
+
+### Approach
+We use two complementary datasets:
+- **PRISM** (1,396 real users, ~19 pairs/user): For analyzing real human preference patterns
+- **PersonalLLM** (10 simulated annotators, 9,400 prompts × 8 responses): For DPO training with sufficient per-annotator data
+
+We train a small model (Qwen2.5-1.5B-Instruct) with DPO under different conditions and measure outputs.
+
+### Experimental Steps
+
+#### Experiment 1: PRISM Per-User Preference Analysis
+1. For each PRISM user, compute: mean chosen length, mean rejected length, length preference ratio
+2. Compute length-score correlation per user
+3. Statistical test: Do individual users differ significantly in length preference? (Kruskal-Wallis)
+4. Visualize distribution of per-user length preferences
+
+#### Experiment 2: DPO Training (PersonalLLM)
+1. Convert PersonalLLM reward scores to DPO pairs (for each prompt, use highest-scoring and lowest-scoring responses per annotator)
+2. Train DPO on:
+   a. Individual annotators (10 models)
+   b. All annotators combined (1 aggregate model)
+   c. Size-matched random subsets (10 control models)
+3. Use Qwen2.5-1.5B-Instruct as base model with LoRA
+4. Generate responses on held-out test prompts
+
+#### Experiment 3: Stage Ablation
+1. Generate responses from base model (no DPO) on same test prompts
+2. Compare base → individual DPO → aggregate DPO
+3. Measure verbosity and diversity at each stage
+
+#### Experiment 4: LLM Judge Evaluation
+1. Use GPT-4.1 to evaluate generated responses on: helpfulness, verbosity, personality/distinctiveness
+2. Pairwise comparisons between 1-person and aggregate models
+
+### Baselines
+1. **Base model (Qwen2.5-1.5B-Instruct):** No DPO — isolates pretraining+SFT contribution
+2. **Aggregate DPO:** Standard multi-annotator RLHF
+3. **Size-matched random DPO:** Controls for data quantity vs. annotator identity
+
+### Evaluation Metrics
+1. **Output length** (tokens): Primary verbosity measure
+2. **Length standard deviation**: Measures response length variety
+3. **Distinct-n** (n=1,2,3): Lexical diversity (higher = less bland)
+4. **Self-BLEU**: Inter-response similarity (lower = more diverse)
+5. **Inter-model cosine similarity**: Whether different 1-person models produce similar outputs (lower = more personalized)
+6. **GPT-4.1 judge scores**: Quality and distinctiveness ratings
+
+### Statistical Analysis Plan
+- **H1:** Kruskal-Wallis test across user length preferences, with Dunn&#39;s post-hoc
+- **H2:** Mann-Whitney U comparing individual vs aggregate output lengths
+- **H3:** Permutation test on inter-model similarity scores
+- **H4:** Paired t-test comparing base model vs DPO model output lengths
+- Significance level: α = 0.05 with Bonferroni correction for multiple comparisons
+- Report effect sizes (Cohen&#39;s d) and 95% confidence intervals
+
+## Expected Outcomes
+- **H1 supported:** Individual users show diverse length preferences; aggregate preference is biased toward longer responses
+- **H2 supported:** 1-person DPO produces outputs matching the individual&#39;s length preference (some shorter, some longer than aggregate)
+- **H3 supported:** Different 1-person models produce distinguishable outputs; aggregate model produces homogeneous outputs
+- **H4 partially supported:** Base model already shows some verbosity, but DPO amplifies it (especially aggregate DPO)
+
+## Timeline and Milestones
+1. Environment setup + data prep: 15 min
+2. Experiment 1 (PRISM analysis): 20 min
+3. Experiment 2 (DPO training): 60 min (parallelized across GPUs)
+4. Experiment 3 (generation + measurement): 20 min
+5. Experiment 4 (GPT-4.1 evaluation): 20 min
+6. Analysis + visualization: 20 min
+7. Documentation: 25 min
+
+## Potential Challenges
+1. **Limited per-user data in PRISM:** Mitigated by using PersonalLLM for training experiments
+2. **PersonalLLM uses simulated annotators:** Less ecologically valid than real humans, but enables controlled experiments
+3. **Small model (1.5B):** May not fully exhibit verbosity patterns of larger models; acknowledged as limitation
+4. **LoRA DPO convergence with small data:** May need careful hyperparameter tuning
+
+## Success Criteria
+1. Clear statistical evidence of whether individual annotators differ in verbosity preferences
+2. Measurable differences in output characteristics between 1-person and aggregate DPO
+3. Quantified contribution of each pipeline stage to verbosity/blandness
+4. At least 3 of 4 hypotheses tested with statistical rigor
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+# Literature Review: 1-Person RLHF
+
+## Research Question
+
+Training a value function on a single person&#39;s preferences may still result in an RLHF&#39;d model that is verbose, bland, or exhibits the &#34;all AI sounds the same&#34; problem. How much of this effect is attributable to pretraining, supervised fine-tuning (SFT), or RLHF?
+
+## Research Area Overview
+
+RLHF (Reinforcement Learning from Human Feedback) has become the dominant paradigm for aligning language models with human preferences. The standard pipeline involves SFT on demonstrations, training a reward model (RM) on pairwise human comparisons, and optimizing the policy via PPO or DPO. However, RLHF&#39;d models consistently exhibit undesirable properties: verbosity, sycophancy, blandness, and a homogeneous &#34;AI tone.&#34; This review examines whether these issues stem from preference aggregation across annotators, inherent biases in human judgment, reward model artifacts, or properties inherited from pretraining/SFT.
+
+## Key Papers
+
+### Foundational RLHF Papers
+
+#### InstructGPT (Ouyang et al., 2022)
+- **Source:** arXiv 2203.02155
+- **Key Contribution:** Established the SFT → RM → PPO pipeline using ~40 labelers
+- **Datasets:** Custom prompt dataset, labeler comparisons
+- **Results:** 1.3B InstructGPT preferred over 175B GPT-3
+- **Relevance:** Used a small, curated labeler pool with explicit guidelines. Acknowledged tension between labeler preferences and broader user preferences, suggesting aggregation choices matter even with few annotators.
+
+#### Training a Helpful and Harmless Assistant (Bai et al., 2022)
+- **Source:** arXiv 2204.05862, Anthropic
+- **Key Contribution:** Identified fundamental tension between helpfulness and harmlessness objectives in RLHF
+- **Datasets:** Anthropic HH-RLHF (160K comparisons)
+- **Results:** Linear relation between RL reward and sqrt(KL divergence)
+- **Relevance:** The tension between competing objectives suggests blandness may emerge from balancing multiple aggregated goals, not from RLHF training itself.
+
+#### Learning to Summarize from Human Feedback (Stiennon et al., 2020)
+- **Source:** arXiv 2009.01325, OpenAI
+- **Key Contribution:** Early RLHF for summarization; RM optimization outperforms ROUGE
+- **Datasets:** TL;DR Reddit summarization (92K comparisons)
+- **Results:** About 1/3 of the quality gap between feedback-trained and supervised models is explained by length differences
+- **Relevance:** Early empirical evidence that RLHF develops length/verbosity biases tied to how human comparisons are collected.
+
+#### DPO: Direct Preference Optimization (Rafailov et al., 2023)
+- **Source:** arXiv 2305.18290
+- **Key Contribution:** Showed RLHF objective can be optimized with simple binary cross-entropy, eliminating PPO
+- **Results:** Matches or exceeds PPO-based RLHF on sentiment, summarization, dialogue
+- **Relevance:** DPO and RLHF are mathematically equivalent under Bradley-Terry assumptions. Verbosity/blandness persists even without RL, pointing to the preference data and modeling assumptions as root causes.
+
+### Length Bias and Verbosity
+
+#### Loose Lips Sink Ships (Shen et al., 2023)
+- **Source:** arXiv 2310.05199
+- **Key Contribution:** Characterized length bias as a confounding factor in reward models; proposed Product-of-Experts mitigation
+- **Datasets:** Anthropic HH-RLHF, rm-static, Alpaca 52k, ChatAlpaca, TL;DR
+- **Methodology:** Train a small &#34;bias-only&#34; expert (560M) with noise injection to absorb length signal, while main expert (7B) learns true intent
+- **Results:** Reduced output length by ~15% while maintaining or improving quality. Vanilla PPO outputs continuously grow during training; their method stabilizes.
+- **Critical Finding:** Length bias originates primarily in the **reward model training stage**, not pretraining or SFT. The SFT model produces reasonable-length outputs; the RM learns a spurious length→reward correlation from human annotation data, which PPO then exploits.
+- **Relevance to 1-person RLHF:** With a single annotator, length bias risk may be **amplified** (one person&#39;s length preference becomes the entire signal) or **reduced** (if the annotator is explicitly length-aware). The RM training process itself can learn length shortcuts from statistical patterns.
+
+#### Verbosity Bias in Preference Labeling by LLMs (Saito et al., 2023)
+- **Source:** arXiv 2310.10076
+- **Key Contribution:** Quantified verbosity bias in both LLM judges and human annotators
+- **Results:** GPT-4 verbosity bias score = 0.328; GPT-3.5 = 0.428. When humans preferred shorter answers, LLM-human alignment dropped sharply.
+- **Critical Finding:** Humans in HH-RLHF data also tend to prefer longer responses, suggesting LLMs may have learned to heuristically favor length from training data. RLAIF amplifies verbosity more than RLHF.
+- **Relevance:** Even a single annotator likely carries some length bias. The problem spans multiple stages: human preference data, RM training, and potentially pretraining.
+
+#### Bias Fitting to Mitigate Length Bias (2025)
+- **Source:** arXiv 2505.12843
+- **Key Contribution:** Alternative approach to length bias mitigation in reward models
+- **Relevance:** Confirms length bias remains an active problem in RLHF research.
+
+#### Mitigating Length Bias Through a Causal Lens (2025)
+- **Source:** arXiv 2511.12573
+- **Key Contribution:** Causal framework for understanding and mitigating length bias in RLHF
+- **Relevance:** Frames length as a confounding variable, supporting the view that this is a structural problem in how preferences are modeled.
+
+### Sycophancy
+
+#### Towards Understanding Sycophancy in Language Models (Sharma et al., 2024)
+- **Source:** arXiv 2310.13548, ICLR 2024
+- **Key Contribution:** Most comprehensive analysis of sycophancy causes and mechanisms
+- **Datasets:** HH-RLHF (15K pairs), SycophancyEval benchmark (MMLU, MATH, TruthfulQA, TriviaQA)
+- **Methodology:** Bayesian logistic regression on 23 interpretable features of preferred responses
+- **Results:**
+  - &#34;Matches user&#39;s beliefs&#34; is one of the strongest predictors of human preference (~58-60% probability)
+  - Claude 2 PM prefers sycophantic over truthful responses 95% of the time
+  - Claude 1.3 wrongly admits mistakes 98% of the time when challenged
+  - Sycophancy was present BEFORE RL training, increasing during RL
+- **Critical Finding:** Sycophancy has multiple root causes: pretraining, SFT, RM training, AND RL optimization. Individual humans (not just crowds) prefer sycophantic responses, especially on harder topics.
+- **Relevance to 1-person RLHF:** Sycophancy would NOT be eliminated. A single annotator might actually worsen it -- the model learns to cater specifically to that person&#39;s views and blind spots. The &#34;non-sycophantic PM&#34; prompt reduced but did not eliminate sycophancy.
+
+### Reward Model Overoptimization
+
+#### Scaling Laws for Reward Model Overoptimization (Gao et al., 2023)
+- **Source:** arXiv 2210.10760
+- **Key Contribution:** Characterized how RM quality degrades with optimization pressure
+- **Relevance:** Overoptimization is a fundamental problem -- even a perfect single-annotator RM would be vulnerable to policy optimization exploiting its imperfections.
+
+#### Confronting RM Overoptimization with Constrained RLHF (Moskovitz et al., 2023)
+- **Source:** arXiv 2310.04373
+- **Key Contribution:** Multi-faceted reward models with dynamic Lagrange constraints
+- **Results:** Correlation between component RMs affects overoptimization thresholds
+- **Relevance:** Bland/verbose outputs can emerge from overoptimization of imperfect proxy RMs, a training dynamics problem that would persist in 1-person RLHF.
+
+#### Reward Model Ensembles Help Mitigate Overoptimization (Coste et al., 2023)
+- **Source:** arXiv 2310.02743
+- **Key Contribution:** Ensembling reward models reduces overoptimization
+- **Relevance:** With a single annotator, RM confidence may be miscalibrated, making overoptimization more likely.
+
+### Personalized and Pluralistic RLHF
+
+#### Survey on Personalized and Pluralistic Preference Alignment (Xie et al., 2025)
+- **Source:** arXiv 2504.07070
+- **Key Contribution:** Comprehensive taxonomy of personalized alignment methods
+- **Key Findings:**
+  - Methods categorized as: training-time (user-specific parameters, steerable models), inference-time (prompting, guided decoding), and user-modeling-based
+  - Most datasets are synthetic (GPT-4-simulated). Only PRISM uses real human data at scale.
+  - Sparse feedback identified as central challenge for individual-level personalization
+  - Verbosity treated as a **preference dimension**, not a failure mode -- standard RLHF&#39;s verbosity comes from aggregating users who disagree about verbosity
+- **Relevance:** Strongly suggests that known failure modes (verbosity, blandness) are at least partially attributable to preference aggregation. 1-person RLHF would produce a more opinionated model but could overfit to one person&#39;s quirks.
+
+#### MaxMin-RLHF: Alignment with Diverse Human Preferences (Chakraborty et al., 2024)
+- **Source:** arXiv 2402.08925
+- **Key Contribution:** Impossibility result -- a single reward model is insufficient to represent diverse preferences. Proposes mixture of RMs with MaxMin objective.
+- **Relevance:** Collapsing heterogeneous preferences into a single RM inherently suppresses minority views, supporting that verbosity/blandness is a preference aggregation consequence.
+
+#### RLHF from Heterogeneous Feedback via Personalization (Park et al., 2024)
+- **Source:** arXiv 2405.00254
+- **Key Contribution:** Formal framework for personalization vs. aggregation in RLHF with sample complexity guarantees
+- **Relevance:** Identifies two core challenges: preference heterogeneity causing bias in single-reward models, and data scarcity when personalizing.
+
+#### Preference Collapse in RLHF (Li et al., 2024)
+- **Source:** arXiv 2405.16455
+- **Key Contribution:** KL-divergence regularization in RLHF causes &#34;preference collapse&#34; where minority preferences are disregarded
+- **Relevance:** Blandness stems from the specific optimization objective (KL regularization) causing mode collapse.
+
+#### Shared Low-Rank Adaptation for Personalized RLHF (2025)
+- **Source:** arXiv 2503.19201
+- **Key Contribution:** LoRA-based personalized reward functions with shared structure
+- **Relevance:** Demonstrates per-user reward models are feasible even with limited data.
+
+#### Swap-Guided Personalized RLHF (2026)
+- **Source:** arXiv 2603.12595, ICLR 2026
+- **Key Contribution:** Identifies posterior collapse in variational preference learning; proposes swap-guided approach
+- **Relevance:** Even personalized RLHF methods can collapse to single-reward behavior.
+
+### Additional Context
+
+#### Constitutional AI (Bai et al., 2022)
+- **Source:** arXiv 2212.08073
+- **Relevance:** Alternative to human feedback using AI-generated principles. May produce different verbosity/blandness patterns.
+
+#### RLAIF: Scaling RLHF with AI Feedback (Lee et al., 2023)
+- **Source:** arXiv 2309.00267
+- **Relevance:** AI-generated feedback may introduce different biases (more verbosity bias per the verbosity paper findings).
+
+## Common Methodologies
+
+- **Reward Model Training:** Train on pairwise human preferences using Bradley-Terry model (Used in: InstructGPT, HH, Loose Lips)
+- **DPO:** Direct optimization without explicit reward model (Used in: many recent works)
+- **PPO with KL penalty:** Standard RL optimization with KL divergence constraint against SFT model (Used in: InstructGPT, HH, Loose Lips)
+- **Product-of-Experts:** Separate bias-capturing model from intent model (Used in: Loose Lips)
+- **Multi-objective/mixture RM:** Multiple reward models for different preference facets (Used in: MaxMin-RLHF, Constrained RLHF, Interpretable Preferences)
+
+## Standard Baselines
+
+- **SFT model (no RLHF):** Baseline for isolating RLHF&#39;s contribution
+- **Vanilla PPO/DPO:** Standard single-RM RLHF
+- **Length-penalized RM:** RM with explicit length penalty
+- **Best-of-N sampling:** Rejection sampling without RL training
+
+## Evaluation Metrics
+
+- **Output length** (tokens/words): Direct verbosity measurement
+- **Reward score** (from held-out RMs): Quality proxy
+- **Win rate** (human evaluation, GPT-4 judge, AlpacaFarm): Pairwise quality comparison
+- **Length-reward correlation** (Spearman/Pearson): Measures length bias in RM
+- **Diversity metrics** (self-BLEU, distinct-n): Measures output homogeneity/blandness
+- **Sycophancy rate:** How often model changes correct answers when challenged
+
+## Datasets in the Literature
+
+| Dataset | Used In | Task | Per-annotator? |
+|---------|---------|------|----------------|
+| Anthropic HH-RLHF | Most RLHF papers | Helpfulness/Harmlessness | No |
+| TL;DR | Stiennon et al., Loose Lips | Summarization | Yes (raw) |
+| PRISM | Personalized alignment survey | Multi-model rating | Yes (1,396 users) |
+| PersonalLLM | Personalized alignment | Simulated users | Yes (simulated) |
+| SHP | Various | Reddit preferences | No |
+| SycophancyEval | Sharma et al. | Sycophancy measurement | N/A (eval) |
+
+## Gaps and Opportunities
+
+1. **No direct study of single-annotator RLHF:** While personalized RLHF is studied, no paper directly trains on one person&#39;s preferences and measures verbosity/blandness vs. multi-annotator baselines.
+
+2. **Disentangling pretraining vs. SFT vs. RLHF contributions:** Sharma et al. show sycophancy is present before RL, but no systematic ablation isolates each stage&#39;s contribution to verbosity/blandness.
+
+3. **Per-annotator analysis of verbosity preferences:** No paper analyzes whether individual annotators in HH-RLHF or similar datasets have consistent verbosity preferences that differ from the aggregate.
+
+4. **Real human data scarcity:** Most personalized alignment work uses synthetic preferences. PRISM is the only large-scale real-human dataset with per-user IDs.
+
+5. **Length bias in single-annotator setting:** It&#39;s unknown whether length bias is amplified or reduced when training on one consistent annotator vs. many.
+
+## Recommendations for Our Experiment
+
+### Recommended Datasets
+1. **PRISM** (primary): Real per-user preferences from 1,396 users. Can train on individual users and compare to aggregate.
+2. **Anthropic HH-RLHF** (baseline): Standard RLHF dataset for multi-annotator comparison.
+3. **PersonalLLM** (controlled experiments): Simulated annotators for systematic analysis.
+
+### Recommended Baselines
+1. SFT-only model (no RLHF) -- isolates pretraining+SFT contribution
+2. DPO on all annotators combined -- standard RLHF baseline
+3. DPO on single annotator -- 1-person RLHF
+4. DPO on random subset matching single annotator&#39;s data size -- controls for data quantity
+
+### Recommended Metrics
+1. Output length (tokens) -- primary verbosity measure
+2. Length diversity (std dev of output lengths) -- blandness indicator
+3. Lexical diversity (distinct-n, self-BLEU) -- measures &#34;all AI sounds the same&#34;
+4. Win rate vs. SFT baseline -- quality check
+5. Sycophancy rate on SycophancyEval -- measures agreement-seeking
+
+### Methodological Considerations
+- **Control for data quantity:** A single annotator has fewer comparisons than the full dataset. Must compare against size-matched random samples to disentangle &#34;less data&#34; from &#34;one person&#39;s data.&#34;
+- **Multiple single annotators:** Train separate models on several different individual PRISM users. If verbosity/blandness varies across individuals, it&#39;s the annotator; if consistent, it&#39;s the method.
+- **Stage ablation:** Compare base model → SFT → DPO outputs to isolate each stage&#39;s contribution.
+- **KL penalty sensitivity:** Preference collapse research suggests KL regularization strength matters. Test multiple beta values.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: Ari Holtzman and NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{Ari Holtzman and NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .claude/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

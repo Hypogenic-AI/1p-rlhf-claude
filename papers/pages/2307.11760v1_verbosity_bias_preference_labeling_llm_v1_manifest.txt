@@ -1,0 +1,9 @@
+PDF: /workspaces/1p-rlhf-claude/papers/2307.11760v1_verbosity_bias_preference_labeling_llm_v1.pdf
+Total pages: 10
+Pages per chunk: 3
+
+Chunks:
+  2307.11760v1_verbosity_bias_preference_labeling_llm_v1_chunk_001.pdf: pages 1-3
+  2307.11760v1_verbosity_bias_preference_labeling_llm_v1_chunk_002.pdf: pages 4-6
+  2307.11760v1_verbosity_bias_preference_labeling_llm_v1_chunk_003.pdf: pages 7-9
+  2307.11760v1_verbosity_bias_preference_labeling_llm_v1_chunk_004.pdf: page 10

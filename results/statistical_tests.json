@@ -1,0 +1,54 @@
+{
+  "individual_gemma_2b_vs_aggregate": {
+    "U": 4573.5,
+    "p": 0.29750630615447815,
+    "effect_r": 0.08530000000000004,
+    "cohens_d": -0.17551207497180468,
+    "mean_individual": 119.28,
+    "mean_aggregate": 143.61
+  },
+  "individual_beaver_7b_vs_aggregate": {
+    "U": 4168.5,
+    "p": 0.04202700835041984,
+    "effect_r": 0.1663,
+    "cohens_d": -0.32123690611527733,
+    "mean_individual": 100.81,
+    "mean_aggregate": 143.61
+  },
+  "individual_oasst_deberta_v3_vs_aggregate": {
+    "U": 4837.0,
+    "p": 0.6911838329347375,
+    "effect_r": 0.03259999999999996,
+    "cohens_d": -0.1775125678885614,
+    "mean_individual": 119.56,
+    "mean_aggregate": 143.61
+  },
+  "individual_gemma_2b_vs_base": {
+    "U": 4957.0,
+    "p": 0.9172219540917643,
+    "cohens_d": 0.0035772933451198026,
+    "mean_model": 119.28,
+    "mean_base": 118.8
+  },
+  "individual_beaver_7b_vs_base": {
+    "U": 4595.5,
+    "p": 0.3228908346004836,
+    "cohens_d": -0.13988493140478564,
+    "mean_model": 100.81,
+    "mean_base": 118.8
+  },
+  "individual_oasst_deberta_v3_vs_base": {
+    "U": 5274.0,
+    "p": 0.5037465632359905,
+    "cohens_d": 0.005804469576393625,
+    "mean_model": 119.56,
+    "mean_base": 118.8
+  },
+  "aggregate_vs_base": {
+    "U": 5402.0,
+    "p": 0.32625015754194575,
+    "cohens_d": 0.17971138112964932,
+    "mean_model": 143.61,
+    "mean_base": 118.8
+  }
+}

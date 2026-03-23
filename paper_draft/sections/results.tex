@@ -1,0 +1,117 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{Individual Users Have Diverse Length Preferences}
+\label{sec:res_prism}
+
+Our analysis of 1,393 \prism users reveals that individual verbosity preferences vary significantly (Kruskal-Wallis $H{=}920.81$, $p{<}10^{-93}$). The mean length preference ratio is 1.189 ($\pm$0.213), indicating that the average user's chosen response is about 19\% longer than their rejected response. However, this aggregate masks substantial heterogeneity: 84.1\% of users prefer longer responses, while 15.9\% prefer shorter ones. The mean score-length correlation is 0.169 ($\pm$0.227), and 32.1\% of users show a statistically significant positive correlation between response length and their assigned scores.
+
+These results confirm that length bias is not universal---a meaningful minority of users prefer concise responses---but the majority preference for longer outputs explains why aggregate reward models develop a strong verbosity signal.
+
+\subsection{Annotator Preferences Transfer to Training Data}
+\label{sec:res_training}
+
+\Tabref{tab:training_pairs} shows the properties of DPO training pairs for each condition. The \beaver annotator is the only one whose chosen responses are shorter than rejected ones (ratio 0.65), while the aggregate condition mirrors the most length-biased annotators (ratio 2.02). This confirms that our experimental conditions span the relevant spectrum of length preferences.
+
+\begin{table}[t]
+    \centering
+    \caption{DPO training pair statistics. Length ratio is mean chosen length divided by mean rejected length. \beaver is the only annotator whose preferred responses are \emph{shorter} than rejected ones.}
+    \begin{tabular}{@{}lcccr@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Pairs} & \textbf{Chosen (words)} & \textbf{Rejected (words)} & \textbf{Ratio} \\
+        \midrule
+        \gemma & 800 & 354 & 168 & 2.11 \\
+        \beaver & 800 & 211 & 325 & \textbf{0.65} \\
+        \oasst & 800 & 333 & 220 & 1.51 \\
+        Aggregate & 800 & 357 & 177 & 2.02 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:training_pairs}
+\end{table}
+
+\subsection{Aggregate RLHF Amplifies Verbosity; Individual RLHF Reflects the Annotator}
+\label{sec:res_generation}
+
+\Tabref{tab:generation} presents the generation metrics. The aggregate DPO model produces the longest responses at 143.6 words, a 21\% increase over the base model's 118.8 words. The \beaver model produces the shortest at 100.8 words, a 15\% decrease from the base. The \gemma model, despite training on data with a 2.11$\times$ length ratio, produces responses nearly identical in length to the base model (119.3 vs.\ 118.8), suggesting that DPO's KL penalty limits how far the model diverges.
+
+\begin{table}[t]
+    \centering
+    \caption{Generation metrics across conditions (100 test prompts). Best results for diversity metrics in \textbf{bold}. Aggregate DPO is the most verbose; \beaver DPO is the most concise and lexically diverse.}
+    \begin{tabular}{@{}lcccccc@{}}
+        \toprule
+        \textbf{Model} & \textbf{Length} & \textbf{Std} & \textbf{Distinct-1} & \textbf{Distinct-2} & \textbf{Self-BLEU} & \textbf{TTR} \\
+        \midrule
+        Base (SFT only) & 118.8 & 133.6 & 0.358 & 0.839 & 0.0026 & 0.358 \\
+        DPO: \gemma & 119.3 & 134.8 & 0.356 & 0.831 & 0.0014 & 0.356 \\
+        DPO: \beaver & \textbf{100.8} & 123.4 & \textbf{0.382} & \textbf{0.845} & 0.0018 & \textbf{0.382} \\
+        DPO: \oasst & 119.6 & 128.2 & 0.346 & 0.830 & 0.0011 & 0.346 \\
+        DPO: Aggregate & 143.6 & 142.4 & 0.347 & 0.836 & \textbf{0.0002} & 0.347 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:generation}
+\end{table}
+
+The Mann-Whitney $U$ test confirms that \beaver produces significantly shorter outputs than the aggregate model ($U{=}4168$, $p{=}0.042$, $d{=}-0.321$). Other individual-versus-aggregate comparisons do not reach significance (\tabref{tab:significance}), likely due to the high variance in response lengths (standard deviations exceed 120 words for all models).
+
+\begin{table}[t]
+    \centering
+    \caption{Statistical comparisons of output length. Only \beaver vs.\ Aggregate reaches significance at $\alpha{=}0.05$.}
+    \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \textbf{Comparison} & \textbf{$U$} & \textbf{$p$-value} & \textbf{Cohen's $d$} \\
+        \midrule
+        \beaver vs.\ Aggregate & 4168 & \textbf{0.042}* & $-$0.321 \\
+        \gemma vs.\ Aggregate & 4574 & 0.298 & $-$0.176 \\
+        \oasst vs.\ Aggregate & 4837 & 0.691 & $-$0.178 \\
+        Aggregate vs.\ Base & 5402 & 0.326 & 0.180 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:significance}
+\end{table}
+
+The \beaver model also achieves the highest lexical diversity (distinct-1 = 0.382, distinct-2 = 0.845), suggesting that training on a brevity-preferring annotator encourages less repetitive language. The aggregate model has the lowest distinct-1 (0.347).
+
+\subsection{The ``All AI Sounds the Same'' Problem Persists}
+\label{sec:res_judge}
+
+\Tabref{tab:judge} presents the \gptjudge evaluation. Distinctiveness scores are uniformly low across all conditions (1.30--1.64 out of 5), including the base model with no DPO training. This is our central negative result: \oneprlhf does not fix the blandness problem.
+
+\begin{table}[t]
+    \centering
+    \caption{\gptjudge scores (1--5 scale). Best in \textbf{bold}. All models score low on distinctiveness, indicating that the generic AI tone persists regardless of training condition.}
+    \begin{tabular}{@{}lcccc@{}}
+        \toprule
+        \textbf{Model} & \textbf{Helpful} & \textbf{Verbose} & \textbf{Distinctive} & \textbf{Quality} \\
+        \midrule
+        Base (SFT only) & 1.88 & 2.36 & 1.50 & 1.68 \\
+        DPO: \gemma & 1.82 & 2.34 & 1.44 & 1.66 \\
+        DPO: \beaver & 1.48 & \textbf{2.10} & 1.30 & 1.40 \\
+        DPO: \oasst & 1.90 & 2.40 & 1.46 & 1.76 \\
+        DPO: Aggregate & \textbf{2.18} & 2.64 & \textbf{1.64} & \textbf{1.88} \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:judge}
+\end{table}
+
+The aggregate model scores highest on helpfulness (2.18) and quality (1.88), while \beaver scores lowest on both (1.48 and 1.40, respectively). This correlation between verbosity and perceived quality suggests that even \gptjudge exhibits a length bias---a finding consistent with \citet{saito2023verbosity}.
+
+Inter-model TF-IDF cosine similarities range from 0.226 to 0.278 (\tabref{tab:similarity}), indicating that different models produce different surface-level word distributions but---as the distinctiveness scores confirm---share a common underlying style.
+
+\begin{table}[t]
+    \centering
+    \caption{Inter-model TF-IDF cosine similarity. Values are uniformly moderate, indicating that models differ in word choice but not in overall style.}
+    \begin{tabular}{@{}lc@{}}
+        \toprule
+        \textbf{Model Pair} & \textbf{Cosine Similarity} \\
+        \midrule
+        Base vs.\ Aggregate & 0.264 \\
+        Base vs.\ \gemma & 0.226 \\
+        Base vs.\ \beaver & 0.233 \\
+        Base vs.\ \oasst & 0.275 \\
+        \beaver vs.\ Aggregate & 0.230 \\
+        \gemma vs.\ Aggregate & 0.267 \\
+        \oasst vs.\ Aggregate & 0.278 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:similarity}
+\end{table}

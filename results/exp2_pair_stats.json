@@ -1,0 +1,26 @@
+{
+  "individual_gemma_2b": {
+    "n_pairs": 800,
+    "mean_chosen_length": 354.07125,
+    "mean_rejected_length": 167.9275,
+    "length_ratio": 2.1084768724598413
+  },
+  "individual_beaver_7b": {
+    "n_pairs": 800,
+    "mean_chosen_length": 211.04875,
+    "mean_rejected_length": 325.27625,
+    "length_ratio": 0.6488292643560666
+  },
+  "individual_oasst_deberta_v3": {
+    "n_pairs": 800,
+    "mean_chosen_length": 332.62625,
+    "mean_rejected_length": 220.1875,
+    "length_ratio": 1.5106500141924497
+  },
+  "aggregate": {
+    "n_pairs": 800,
+    "mean_chosen_length": 356.675,
+    "mean_rejected_length": 176.96625,
+    "length_ratio": 2.0154973052771363
+  }
+}

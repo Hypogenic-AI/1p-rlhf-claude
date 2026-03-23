@@ -1,0 +1,1762 @@
+{
+  "base": [
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 0
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 1
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 4,
+      "quality": 3,
+      "prompt_idx": 2
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 3
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 4
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 5
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 6
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 7
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 8
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 3,
+      "distinctiveness": 3,
+      "quality": 4,
+      "prompt_idx": 9
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 10
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 11
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 12
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 13
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 14
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 15
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 16
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 17
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 18
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 19
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 20
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 21
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 22
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 5,
+      "distinctiveness": 1,
+      "quality": 3,
+      "prompt_idx": 23
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 24
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 25
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 26
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 27
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 28
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 29
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 4,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 30
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 31
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 32
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 33
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 34
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 35
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 36
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 37
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 38
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 39
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 4,
+      "distinctiveness": 3,
+      "quality": 5,
+      "prompt_idx": 40
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 3,
+      "quality": 2,
+      "prompt_idx": 41
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 42
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 43
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 44
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 45
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 46
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 47
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 48
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 49
+    }
+  ],
+  "individual_gemma_2b": [
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 0
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 1
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 4,
+      "quality": 3,
+      "prompt_idx": 2
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 3
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 4
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 5
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 6
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 7
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 8
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 9
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 10
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 11
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 12
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 13
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 14
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 15
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 16
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 17
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 18
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 19
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 20
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 21
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 22
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 5,
+      "distinctiveness": 1,
+      "quality": 3,
+      "prompt_idx": 23
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 24
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 25
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 26
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 27
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 28
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 29
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 30
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 31
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 32
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 33
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 34
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 35
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 36
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 37
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 38
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 39
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 40
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 41
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 42
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 43
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 44
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 45
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 46
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 47
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 48
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 49
+    }
+  ],
+  "individual_beaver_7b": [
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 0
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 1
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 3,
+      "quality": 2,
+      "prompt_idx": 2
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 3
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 4
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 5
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 6
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 7
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 8
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 9
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 10
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 11
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 12
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 13
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 14
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 15
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 16
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 17
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 18
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 19
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 20
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 21
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 22
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 5,
+      "distinctiveness": 1,
+      "quality": 3,
+      "prompt_idx": 23
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 24
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 25
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 26
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 27
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 28
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 29
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 4,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 30
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 31
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 32
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 33
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 34
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 35
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 36
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 37
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 38
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 39
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 40
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 41
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 42
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 43
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 44
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 45
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 46
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 47
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 48
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 49
+    }
+  ],
+  "individual_oasst_deberta_v3": [
+    {
+      "helpfulness": 3,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 0
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 1
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 4,
+      "quality": 3,
+      "prompt_idx": 2
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 3
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 4
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 5
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 6
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 7
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 8
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 9
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 10
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 11
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 12
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 13
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 14
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 15
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 16
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 17
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 18
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 19
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 20
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 21
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 22
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 5,
+      "distinctiveness": 1,
+      "quality": 3,
+      "prompt_idx": 23
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 24
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 25
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 26
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 27
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 28
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 29
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 30
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 31
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 32
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 33
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 34
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 35
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 36
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 37
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 38
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 39
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 40
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 41
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 42
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 43
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 44
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 45
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 46
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 47
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 48
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 49
+    }
+  ],
+  "aggregate": [
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 0
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 1
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 4,
+      "quality": 3,
+      "prompt_idx": 2
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 3
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 4
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 5
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 6
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 7
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 8
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 9
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 10
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 11
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 12
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 13
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 14
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 15
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 16
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 17
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 5,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 18
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 4,
+      "distinctiveness": 3,
+      "quality": 4,
+      "prompt_idx": 19
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 20
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 21
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 22
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 5,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 23
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 24
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 1,
+      "prompt_idx": 25
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 26
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 27
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 28
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 29
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 4,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 30
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 31
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 32
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 33
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 34
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 35
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 36
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 37
+    },
+    {
+      "helpfulness": 4,
+      "verbosity": 2,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 38
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 39
+    },
+    {
+      "helpfulness": 5,
+      "verbosity": 3,
+      "distinctiveness": 2,
+      "quality": 4,
+      "prompt_idx": 40
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 3,
+      "distinctiveness": 1,
+      "quality": 2,
+      "prompt_idx": 41
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 42
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 43
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 44
+    },
+    {
+      "helpfulness": 2,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 2,
+      "prompt_idx": 45
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 46
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 1,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 47
+    },
+    {
+      "helpfulness": 1,
+      "verbosity": 2,
+      "distinctiveness": 1,
+      "quality": 1,
+      "prompt_idx": 48
+    },
+    {
+      "helpfulness": 3,
+      "verbosity": 4,
+      "distinctiveness": 2,
+      "quality": 3,
+      "prompt_idx": 49
+    }
+  ]
+}
