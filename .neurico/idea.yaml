@@ -1,0 +1,25 @@
+idea:
+  title: 1-person RLHF
+  domain: artificial_intelligence
+  hypothesis: 'Training a value function on a single person''s preferences may still
+    result in an RLHF''d model that is verbose, bland, or exhibits the ''all AI sounds
+    the same'' problem. This research aims to determine how much this effect is attributable
+    to pretraining, supervised fine-tuning (SFT), or RLHF.
+
+    '
+  background:
+    description: 'If we train a value function on a person''s preferences, does an
+      RLHF''d model still become annoyingly verbose, bland, or otherwise generic?
+      This idea seeks to disentangle how much the ''all AI sounds the same'' problem
+      is due to pretraining, SFT, or RLHF.
+
+      '
+  metadata:
+    author: Ari Holtzman
+    source: IdeaHub
+    source_url: https://hypogenic.ai/ideahub/idea/tR0POffUc3NV1zOIXq9d
+    idea_id: 1_person_rlhf_20260323_130454_8df60ced
+    created_at: '2026-03-23T13:04:54.548099'
+    status: submitted
+    github_repo_name: 1p-rlhf-claude
+    github_repo_url: https://github.com/Hypogenic-AI/1p-rlhf-claude
